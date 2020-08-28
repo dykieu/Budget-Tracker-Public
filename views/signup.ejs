@@ -1,0 +1,28 @@
+<div class="container">
+	<div class="card" id="login">
+		<h1> Sign up </h1>
+		<form action="/su" method="POST">
+			<input type="hidden" name="csrf" value="<%= csrf %>">
+			<div class="input-group">
+				<span class="input-text">
+					<i class="fas fa-user"></i>
+				</span>
+				<input type="text" name="username" class="form-control" placeholder="username" required=''>
+			</div>
+			<div class="input-group">
+				<span class="input-text">
+					<i class="far fa-id-card"></i>
+				</span>
+				<input type="text" name="name" class="form-control" placeholder="name" required=''>
+			</div>
+			<div class="input-group">
+				<span class="input-text">
+					<i class="fas fa-key"></i>
+				</span>
+				<input type="password" name="password" class="form-control" placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="1 number, 1 uppercase, 1 lower case, and atleast 8 or more characters" required=''>
+			</div>
+			<button id='loginBtn' type="submit"> sign up </button>
+		</form>
+		<a id='signupLink' href="/"> login </a>
+	</div>
+</div>

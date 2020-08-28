@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="/css/styles.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;1,300;1,400&display=swap">
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js" crossorigin='anonymous' SameSite="None"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" crossorigin='anonymous'></script>
+	<title>Budget Tracker</title>
+</head>
+<body>
+	<div class="splash"></div>
+	<br>
+		<% if (currentUser) { %>
+			<div class="wrapper">
+				<div class="sidebar">
+				<h2> Side Bar</h2>
+				<ul>
+					<li id="first"><a href="/"><i class="fas fa-home"></i> Home</a></li>
+					<li><a href="logistics"><i class="fas fa-chart-bar"></i> Logistics</a></li>
+					<li><a href="add"><i class="far fa-plus-square"></i> Add</a></li>
+					<li><a href="logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+				</ul>
+				</div>
+				<div class="main_content">
+					<%- body %> 
+				</div>
+			</div>
+		<% } else { %>
+			<%- body %> 	
+		<% } %> 
+
+	<br>
+	<script src='https://code.jquery.com/jquery-3.4.1.js' integrity='sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=' crossorigin='anonymous'></script>
+	<script src="/js/index.js"></script>
+</body>
+</html>

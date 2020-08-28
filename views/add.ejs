@@ -1,0 +1,280 @@
+<div class="header">
+	<%= title %>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="column" id="colLeft">
+			<div class="card" id="addCard">
+				<div class="addForms">
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<div class="select">
+						<label for="entryType"></label>
+						<select name="entryType" id="entryType">
+							<option value="0"> Select an Option</option>
+							<option value="bank"> Bank </option>
+							<option value="budget"> Budget </option>
+							<option value="deposit"> Deposit</option>
+							<option value="spending"> Spending</option>
+						</select>
+					</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<form action="/add/bank" method="POST" class="bankForm">
+						<input type="hidden" name="csrf" value="<%= csrf %>">
+						<h4> Adding a Bank Account</h4>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="fas fa-university"></i>
+							</span>
+							<input type="text" name="bankName" class="form-control" placeholder="Bank Name" required=''>
+						</div>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="fas fa-money-check-alt"></i>
+							</span>
+							<input type="number" step=".01" name="bankBalance" class="form-control" placeholder="Bank Balance" required=''>
+						</div>
+						<button type="submit" class="addBtn">Submit</button>
+					</form>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<form action="/add/budget" method="POST" class="budgetForm">
+						<input type="hidden" name="csrf" value="<%= csrf %>">
+						<h4> Adding a Budget</h4>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="fas fa-wallet"></i>
+							</span>
+							<input type="text" name="budgetName" class="form-control" placeholder="Budget Catagory" required=''>
+						</div>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="far fa-money-bill-alt"></i>
+							</span>
+							<input type="number" step=".01" name="budgetBalance" class="form-control" placeholder="Budget Amount" required=''>
+						</div>
+						<div class="input-group">
+							<label for="budgetDateBeg"> Month: </label>
+							<input type="month" name="budgetDate" class="form-control" placeholder="Start Date" required=''>
+						</div>
+						<button type="submit" class="addBtn">Submit</button>
+					</form>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<form action="/add/deposit" method="POST" class="depositForm">
+						<input type="hidden" name="csrf" value="<%= csrf %>">
+						<h4> Adding a Deposit</h4>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="fas fa-university"></i>
+							</span>
+							<input type="text" name="bankName" class="form-control" placeholder="Bank Account" required=''>
+						</div>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="far fas fa-money-check"></i>
+							</span>
+							<input type="number" step=".01" name="depositAmt" class="form-control" placeholder="Deposit Amount" required=''>
+						</div>
+						<div class="input-group">
+							<label for="depositType"> Type: </label>
+							<select name="depositType" id="depositType">
+								<option value="0"> Select an Option</option>
+								<option value="paycheck"> Paycheck </option>
+								<option value="other"> Other </option>
+							</select>
+						</div>
+						<div class="input-group">
+							<textarea name="depositDesc" id="depositDesc" cols="60" rows="10" placeholder="Notes/Description if applicable"></textarea>
+						</div>
+						<button type="submit" class="addBtn">Submit</button>
+					</form>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<form action="/add/spending" method="POST" class="spendingForm">
+						<input type="hidden" name="csrf" value="<%= csrf %>">
+						<h4> Adding a Expenditure</h4>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="fas fa-university"></i>
+							</span>
+							<input type="text" name="bankName" class="form-control" placeholder="Bank Account" required=''>
+						</div>
+						<div class="input-group">
+							<span class="input-text">
+								<i class="far fas fa-money-check"></i>
+							</span>
+							<input type="number" step=".01" name="spendAmt" class="form-control" placeholder="Spending Cost" required=''>
+						</div>
+						<div class="input-group">
+							<label for="spendType"> Type: </label>
+							<input type="text" name="spendType" placeholder="Catagory of spending" class="form-control" required='' title="hello">
+						</div>
+						<div class="input-group">
+							<textarea name="spendDesc" id="spendDesc" cols="60" rows="10" placeholder="Notes/Description if applicable"></textarea>
+						</div>
+						<button type="submit" class="addBtn">Submit</button>
+					</form>
+				</div>
+			</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+			<div class="card" id="catagoryCardBank">
+				<div class="tooltipTable">
+					<h2> Current Banks</h2>
+					<% if (banks != '' && banks != null) { %> 
+						<table>
+						<tr>
+							<th> </th>
+							<th> Bank Name </th>
+						</tr>
+						<% for (let i = 0; i < banks.length; i++) { %>
+							<tr>
+							<td> <%= i + 1  %> </td>
+							<td> <%= banks[i].bankName %> </td>
+							</tr>
+						<% } %>  
+						</table>
+					<% } else {%>
+						<h4 class="noneError"> No Bank accounts currently added </h4>
+					<% } %>
+				</div>
+			</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+			<div class="card" id="catagoryCard">
+				<div class="tooltipTable">
+					<h2> Current Catagories</h2>
+					<% if (catagories != '') { %> 
+						<table>
+						<tr>
+							<th> </th>
+							<th> Catagory </th>
+						</tr>
+						<% for (let i = 0; i < catagories.length; i++) { %>
+							<tr>
+							<td> <%= i + 1  %> </td>
+							<td> <%= catagories[i] %> </td>
+							</tr>
+						<% } %>  
+						</table>
+					<% } else {%>
+						<h4 class="noneError"> No catagories/budgets set currently </h4>
+					<% } %>
+				</div>
+			</div>
+		</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<div class="column" id="colRight">
+			<div class="card" id="addToolTip">
+				<span class="addToolTipText">
+					<h1> Helpful Tips! </h1>
+					<div class="card help">
+						<h4> From the drop-down, select Which form you would like to use. </h4>
+					</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<div class="card help">
+						<h2> Bank </h2>
+						<table>
+							<tr>
+								<th></th>
+								<th> Description </th>
+							</tr>
+							<tr>
+								<td> Purpose </td>
+								<td> By Selecting 'Bank', it will display a form to add a bank</td>
+							</tr>
+							<tr>
+								<td> Bank Name </td>
+								<td> Just enter the name of the bank account or bank. This must be unique! You may not list more than one of the same account</td>
+							</tr>
+							<tr>
+								<td> Bank Balance </td>
+								<td> Enter the current balance of your bank. Do not include $ or ,</td>
+							</tr>
+						</table>
+					</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<div class="card help">
+						<h2> Budget </h2>
+						<table>
+							<tr>
+								<th></th>
+								<th> Description </th>
+							</tr>
+							<tr>
+								<td> Purpose </td>
+								<td> By Selecting 'Budget', it will display a form to add budget constraints to a month</td>
+							</tr>
+							<tr>
+								<td> Budget Catagory </td>
+								<td> Enter the label you want to catagorize the spending as</td>
+							</tr>
+							<tr>
+								<td> Budget Amount </td>
+								<td> Enter the maximum you want to spend on this catagory. Do not include $ or ,</td>
+							</tr>
+							<tr>
+								<td> Month </td>
+								<td> Select the month and year you want the budget to be tied to</td>
+							</tr>
+						</table>
+					</div>
+				</span>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<div class="card help">
+					<h2> Deposit </h2>
+					<table>
+						<tr>
+							<th></th>
+							<th> Description </th>
+						</tr>
+						<tr>
+							<td> Purpose </td>
+							<td> By Selecting 'Deposit', it will display a form to add a deposit into your account</td>
+						</tr>
+						<tr>
+							<td> Bank Account </td>
+							<td> Enter the name of the account you want to add to (Case-sensetive)</td>
+						</tr>
+						<tr>
+							<td> Deposit Amount </td>
+							<td> Enter how much you are depositing. Do not include $ or ,</td>
+						</tr>
+						<tr>
+							<td> Type </td>
+							<td> Select if this is a paycheck or other</td>
+						</tr>
+						<tr>
+							<td> Description </td>
+							<td> Optional description if you want to make a note</td>
+						</tr>
+					</table>
+				</div>
+				<div class="card help" id="lastHelp">
+					<h2> Spending / Expenditures </h2>
+					<table>
+						<tr>
+							<th></th>
+							<th> Description </th>
+						</tr>
+						<tr>
+							<td> Purpose </td>
+							<td> By Selecting 'Spending', it will display a form to add a expenditure into your account</td>
+						</tr>
+						<tr>
+							<td> Bank Account </td>
+							<td> Enter the name of the account you want to add to (Case-sensetive)</td>
+						</tr>
+						<tr>
+							<td> Spending Cost </td>
+							<td> Enter how much you spent. Do not include $ or ,</td>
+						</tr>
+						<tr>
+							<td> Type </td>
+							<td> You may choose a budget catagory, if you don't want to add it to a budget, put etc</td>
+						</tr>
+						<tr>
+							<td> Description </td>
+							<td> Optional description if you want to make a note</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

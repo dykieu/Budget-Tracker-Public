@@ -1,0 +1,156 @@
+<div class="header">
+  <%= title %>
+</div>
+<div class="info">
+  <div class="row">
+    <div class="column" id="colLeft">
+      <div class="card">
+        <div class="container">
+          <h1> Hello <%= name %> </h1>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+          <div class="bankAccounts">
+            <% if (bankAcc != '' && bankAcc != null) { %>
+              <div class="tblheader">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="numSlot"></th>
+                      <th> Account Name </th>
+                      <th> Balance </th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="scrollTable">
+                <table>
+                  <tbody>
+                    <% for (let i = 0; i < bankAcc.length; i++) { %>
+                      <tr>
+                        <td> <%= i + 1  %> </td>
+                        <td> <%= bankAcc[i].bankName %></td>
+                        <td> $<%= bankAcc[i].balance %></td>
+                      </tr>
+                    <% } %> 
+                  </tbody>
+                </table>
+              </div>
+            <% } else { %>
+              <h4 class="noneError"> No Banks added </h4>
+              <h4 class="noneError"> Visit the <a href="/add">add</a> tab to add bank accounts</h4>
+            <% } %>  
+          </div>
+        </div>
+      </div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+      <div class="card">
+        <div class="container">
+          <h1> Budget</h1>
+          <div class="budgetTable">
+            <% if (budget != '' && budget != null) { %> 
+              <div class="tblheader">
+                <table id="pieDataHeader">
+                  <thead>
+                    <tr>
+                      <th class="numSlot"></th>
+                      <th> Catagory </th>
+                      <th> Total Budget </th>
+                      <th> Total Spent </th>
+                    </tr>
+                  </thead>
+                </table>                
+              </div>
+              <div class="scrollTable">
+                <table id="pieData">
+                  <tbody>
+                    <% for (let i = 0; i < budget.length; i++) { %>
+                      <tr>
+                        <td> <%= i + 1  %> </td>
+                        <td> <%= budget[i].catagory %> </td>
+                        <td> $<%= budget[i].budget %></td>
+                        <td> $<%= budget[i].spent %></td>
+                      </tr>
+                    <% } %>  
+                  </tbody>
+                </table>
+              </div>
+            <% } else {%>
+              <h4 class="noneError"> No budget set for current month </h4>
+              <h4 class="noneError"> Visit the <a href="/add">add</a> tab to set budgets</h4>
+            <% } %>  
+          </div>
+        </div>
+      </div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+      <div class="card">
+        <div class="container">
+          <h1> Income</h1>
+          <h4> <%= depositRange.start %> - <%= depositRange.end %>  </h6>
+          <div class="income">
+            <% if (deposits != '' && deposits != null) { %>
+              <div class="tblheader">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="numSlot"></th>
+                      <th> Type </th>
+                      <th> Amount </th>
+                      <th> Date </th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="scrollTable">
+                <table>
+                  <tbody>
+                    <% for (let i = 0; i < deposits.length; i++) { %>
+                      <tr>
+                        <td> <%= i + 1  %> </td>
+                        <td> <%= deposits[i].type %></td>
+                        <td> $<%= deposits[i].amount %></td>
+                        <td> <%= deposits[i].date %> </td>
+                      </tr>
+                    <% } %>  
+                  </tbody>
+                </table>
+              </div>
+            <% } else {%>
+              <h4 class="noneError"> No Deposits made for the current month </h4>
+              <h4 class="noneError"> Visit the <a href="/add">add</a> tab to add deposits</h4>
+            <% } %> 
+          </div>
+        </div>
+      </div>
+    </div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+    <div class="column" id="colRight">
+      <div class="card">
+        <div class="container" id="spendingContainer">
+          <h1> Monthly Spending </h1>
+          <% if (budget != '' && budget != null) { %>
+            <div class="container">
+              <canvas id="myChart"></canvas>
+            </div>
+          <% } else { %>
+            <h4 class="noneError"> No budget data available to render </h4>
+          <% } %>   
+        </div>
+      </div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+      <div class="card" id="budgetContainer">
+        <div class="container">
+          <h1> Budget Per Catagory </h1>
+          <% if (budget != '' && budget != null) { %>
+            <div class="container">
+              <canvas id="myBudget"></canvas>
+            </div>
+          <% } else { %>
+            <h4 class="noneError"> No budget data available to render </h4>
+          <% } %> 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src='/js/pie.js'></script>
+<script src='/js/bar.js'></script>

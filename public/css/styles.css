@@ -1,0 +1,753 @@
+:root {
+	--background: #fce6e6;
+	--sidehover: #9b686b;
+	--sidebar: #c28285;
+	--header: #f5c2c2;
+	--headerText: #fdfdfd;
+	--shadow: #0000003f;
+	--cardColor: #f8f8f8;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}
+
+body {
+	text-align: center;
+	font-family: "Montserrat";
+	font-weight: 300;
+	font-size: 16px;
+	background: var(--sidebar);
+	/*overflow-x: hidden;*/
+	overflow-y: hidden;
+}
+
+/********************************************** 
+					NavBar 
+***********************************************/
+.main_content{
+	background: var(--background);
+}
+/* Sidebar Positioning */
+.wrapper{
+	top: 0;
+	display: flex;
+	position: absolute;
+	width: 90%;
+	height: 100%;
+}
+
+/* Sidebar setup/format */
+.wrapper .sidebar{
+	width: 10%;
+	height: 100%;
+	background: var(--sidebar);
+	padding: 30px 0px;
+	position: fixed;
+}
+
+/* Sidebar Header Format */
+.wrapper .sidebar h2{
+	color: #fff;
+	text-transform: uppercase;
+	text-align: center;
+	margin-bottom: 30px;
+	
+}
+
+.header {
+	font-size: 24px;
+}
+
+#first {
+	border-top: 1px solid rgba(0,0,0,0.15);
+}
+
+/* Sidebar Spacing */
+.wrapper .sidebar ul li{
+	padding: 15px;
+	border-bottom: 1px solid #f3f3f3;
+	border-bottom: .5px solid rgba(0,0,0,0.15);
+}
+
+/* Sidebar option tag formatting */
+.wrapper .sidebar ul li a{
+	color: #ecebf1;
+	display: block;
+}
+
+.wrapper .sidebar ul li a .fas{
+	width: 25px;
+}
+
+.wrapper .sidebar ul li:hover{
+	background-color: var(--sidehover);
+}
+
+.wrapper .sidebar ul li:hover a{
+	color: #fff;
+}
+
+/********************************************** 
+					HOME
+***********************************************/
+/* Main body formatting*/
+.wrapper .main_content{
+	margin-left: 11%;
+}
+
+/* Header Formatting*/
+.wrapper .main_content .header{
+	padding: 1em;
+	background: var(--header);
+	color: var(--headerText);
+	border-bottom: 1px solid rgba(0,0,0,0.15);
+	text-align: left;
+	width: 90.02vw;
+}
+
+/* Body text formatting*/
+.wrapper .main_content .info {
+	margin: 20px;
+	color: black;
+	line-height: 25px;
+	width: 75vw;
+}
+
+.wrapper .main_content .info div{
+	margin-bottom: 20px;
+}
+
+/* Body Columns*/
+.column {
+    float: left;
+    width: 50%;
+}
+
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+
+/* Cards */
+.card {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	border-radius: 5px;
+	transition: 0.3s;
+	width: 75%;
+	margin: auto;
+	background: var(--cardColor);
+}
+
+.bankAccounts ul li {
+	border-bottom: 1px solid rgba(0,0,0,0.15);
+	padding-bottom: .25em;
+	margin-bottom:  .25em;
+}
+
+.card .container h1 {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.card .container h4 {
+	padding-bottom: .25em;
+}
+
+.payCheck li {
+	border-bottom: 1px solid rgba(0,0,0,0.15);
+	padding-bottom: .25em;
+	margin-bottom:  .25em;	
+}
+
+.income,
+.bankAccounts,
+.budgetTable{
+	padding-bottom: 1em;
+}
+
+.scrollTable {
+	position: relative;
+	height: 8.5em;
+	width: 95%;
+	overflow-y: auto;
+	margin: auto;
+	table-layout: fixed;
+}
+
+/* Scroll bar */
+.scrollTable::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	border-radius: 10px;
+	background: #f5f5f5;
+}
+
+.scrollTable::-webkit-scrollbar {
+	width: 12px;
+	background: #f5f5f5;
+}
+
+.scrollTable::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, .3);
+	background: var(--header);
+}
+
+/* table */
+.income table,
+.bankAccounts table,
+.budgetTable table {
+	margin: auto;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	table-layout: fixed;
+	margin-top: 0;
+}
+
+.income table thead tr th,
+.bankAccounts table thead tr th,
+.budgetTable table thead tr th {
+	background-color: var(--header);
+	padding: .5em;
+
+	border: 1px solid var(--header);
+}
+
+.income .scrollTable table tbody tr td,
+.bankAccounts .scrollTable table tbody tr td,
+.budgetTable .scrollTable table tbody tr td {
+	border: 1px solid rgba(0, 0, 0, 0.199);
+	text-shadow: 1px 1px 1px #fff;
+}
+
+#budgetContainer,
+#spendingContainer {
+	height: 35vh;
+}
+
+.noneError {
+	color: red;
+	padding-bottom: .5em;
+}
+
+/* Chart stuff | Helmet doesn't allow inline styles*/
+#myChart,
+#myBudget {
+	padding: 1em;
+}
+
+.wrapper .main_content 
+.info .row .column .card 
+.container .bankAccounts .tblheader,
+.wrapper .main_content 
+.info .row .column .card 
+.container .income .tblheader,
+.wrapper .main_content 
+.info .row .column .card 
+.container .budgetTable .tblheader {
+	position: relative;
+	width: 95%;
+	margin: auto;
+	margin-bottom: 0;
+	padding: 0;
+	text-align: center;
+}
+/********************************************** 
+				Login Page 
+***********************************************/
+#login {
+	position: absolute;
+	margin: auto;
+	width: 15vw;
+	top: 15%;
+	left: 42.5vw;
+	background-color: rgba(255, 255, 255, 0.411);
+	color: black;
+	box-shadow: 0 19px 25px rgba(0,0,0,0.30), 0 6px 8px rgba(0,0,0,0.22);
+	padding: 1em;
+	border-radius: 25px;
+}
+
+.input-group {
+	padding: .25em;
+}
+
+#loginBtn {
+	background: none;
+	border: 1px solid var(--sidehover);
+	padding: .25em;
+	border-radius: 5px;
+	color: var(--background);
+	margin-top: .5em;
+	margin-bottom: 2em;
+	font-size: 14px;
+}
+
+#loginBtn:hover {
+	background: var(--sidehover);
+	cursor: pointer;
+}
+
+#login h1 {
+	color: var(--background);
+}
+
+.form-control {
+	border-radius: 5px;
+	border: 1px solid rgba(255, 255, 255, 0.411);
+	padding: 5px;
+}
+
+.fas,
+.far {
+	color: var(--background);
+}
+
+#signupLink {
+	margin-top: 50px;
+	color: var(--background);
+}
+
+/********************************************** 
+					ADD 
+***********************************************/
+.selects {
+	font: "Montserrat";
+	position: relative;
+	float: left;
+	padding: 1em;
+	font-size: 20px;
+	border: 1px solid black;
+	border-radius: 6px;
+
+}
+
+.select select {
+	background: transparent;
+	line-height: 1;
+	border: 1px solid black;
+	padding: .5em;
+	border-radius: 6px;
+	position: relative;
+	font-size: 1em;
+	background-position: 80% center;
+}
+
+.input-group select {
+	background: transparent;
+	line-height: 1;
+	border: 1px solid black;
+	padding: .5em;
+	border-radius: 6px;
+	position: relative;
+	font-size: .65em;
+	width: 33%;
+}
+
+/* Add a bank */
+.fa-university,
+.fa-money-check-alt,
+.fa-wallet,
+.fa-money-bill-alt,
+.fa-money-check,
+.fa-list {
+	color: black;
+}
+
+#addCard {
+	margin-top: 1em;
+	background: var(--cardColor);
+	padding: 1em;
+	width: 50%;
+}
+
+.bankForm,
+.budgetForm,
+.depositForm,
+.spendingForm {
+	font-size: 1.25em;
+	padding: 1em;
+	margin-top: 1em;
+	width: 100%;
+	border: 1px solid black;
+	border-radius: 10px;
+	display: block;
+}
+
+.bankForm input,
+.budgetForm input,
+.depositForm input,
+.spendingForm input {
+	font-size: .75em;
+}
+
+.addBtn {
+	background: none;
+	border: 1px solid black;
+	padding: .25em;
+	border-radius: 5px;
+	color: black;
+	margin-top: .5em;
+	margin-bottom: .5em;
+	font-size: 14px;
+	width: 20%;
+	margin-left: 75%;
+}
+
+.addBtn:hover {
+	background: var(--background);
+	cursor: pointer;
+}
+
+textarea {
+	overflow-y: scroll;
+	padding: .5em;
+	width:  calc(100vw - 85vw);
+	height: calc(100vh - 90vh);
+	resize: none;
+	margin: auto;
+}
+
+#addToolTip{
+	margin-top: 1em;
+	margin-left: 0;
+	background: #555;
+	color: #fff;
+	border-radius: 6px;
+	padding: 5px 0;
+	width: 75%;
+	height: 90vh;
+	overflow-y: scroll;
+	box-shadow: 5px 5px 10px 10px rgba(0, 0, 0, 0.267);
+}
+#addToolTip::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.help {
+	margin-top: 1em;
+	background: rgb(112, 112, 112);
+	padding: 1em;
+}
+
+.help table {
+	margin: auto;
+	width: 90%;
+	margin-bottom: 1em;
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin-top: 1em;
+}
+
+.help table tr th {
+	background-color: rgb(146, 146, 146);
+	padding: .5em;
+	border: 1px solid rgba(0, 0, 0, 0.473);
+}
+
+.help table tr td{
+	border: 1px solid rgba(0, 0, 0, 0.473);
+	padding: .5em;
+}
+
+#lastHelp {
+	margin-bottom: 1em;
+}
+
+#catagoryCard,
+#catagoryCardBank {
+	margin-top: 1em;
+	background: var(--cardColor);
+	padding: 1em;
+	width: 50%;
+}
+
+.tooltipTable {
+	padding-bottom: 1em;
+}
+
+.tooltipTable table {
+	margin: auto;
+	width: 90%;
+	margin-bottom: 2em;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.tooltipTable table tr th {
+	background-color: var(--header);
+	padding: .5em;
+	border: 1px solid rgba(0, 0, 0, 0.199);
+}
+
+.tooltipTable table tr td {
+	border: 1px solid rgba(0, 0, 0, 0.199);
+	text-shadow: 1px 1px 1px #fff;
+	padding: .25em;
+}
+
+.tooltipTable table{
+	margin: auto;
+	margin-top: 1em;
+}
+
+/* Scroll bar */
+#addToolTip::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	border-radius: 10px;
+	background: #f5f5f5;
+}
+
+#addToolTip::-webkit-scrollbar {
+	width: 12px;
+	background: #f5f5f5;
+}
+
+#addToolTip::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	background: rgb(146, 146, 146);
+}
+/********************************************** 
+					Error 
+***********************************************/
+.errorMsg {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.errorMsgHdr {
+	margin-top: 1em;
+}
+
+.errorHome {
+	background: none;
+	border: 1px solid black;
+	padding: .25em;
+	border-radius: 5px;
+	color: black;
+	font-size: 24px;
+}
+
+.errorHome:hover {
+	background: var(--background);
+	cursor: pointer;
+}
+
+/********************************************** 
+					Logistics
+***********************************************/
+.expenditureMain {
+	height: 100vh;
+	width: 100%;
+	padding: 1em;
+}
+
+.expenditureMain h1 {
+	margin: .5em;
+}
+
+.expenditureMain2 {
+	height: 100vh;
+	width: 100%;
+	padding: 1em;
+}
+
+.expenditureCol {
+	width: 50%;
+	height: 100vh;
+	float: left;
+}
+
+.expenditureCol2 {
+	width: 80%;
+	height: 100%;
+	float: left;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+.expenditureCol3 {
+	width: 50%;
+	height: 100%;
+	float: left;
+	background: pink;
+}
+
+.colGroup {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	border-radius: 5px;
+	width: 75%;
+	height: 40%;
+	margin: auto;
+	margin-bottom: 1em;
+	background: var(--cardColor);
+	transition: 0.3s;
+}
+
+.colGroup2 {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	border-radius: 5px;
+	width: 45%;
+	height: 40%;
+	margin-left: 2.5%;
+	margin-bottom: 1em;
+	background: var(--cardColor);
+	transition: 0.3s;
+	float: left;
+}
+
+.colGroup3 {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	border-radius: 5px;
+	width: 45%;
+	height: 40%;
+	margin-left: 5%;
+	margin-bottom: 1em;
+	background: var(--cardColor);
+	transition: 0.3s;
+	float: left;
+}
+
+.exTableBody {
+	position: relative;
+	height: 24em;
+	width: 95%;
+	overflow-y: auto;
+	margin: auto;
+	table-layout: fixed;
+}
+
+.exTableHeader table,
+.exTableBody table {
+	margin: auto;
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	table-layout: fixed;
+	margin-top: 0;
+}
+
+.exTableHeader table thead tr th {
+	background-color: var(--header);
+	padding: .5em;
+	
+}
+
+.exTableBody tbody tr td {
+	border: 1px solid rgba(0, 0, 0, .2);
+	text-shadow: 1px 1px 1px #fff;
+}
+
+.exTableBody::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	border-radius: 10px;
+	background: #f5f5f5;
+}
+
+.exTableBody::-webkit-scrollbar {
+	width: 12px;
+	background: #f5f5f5;
+}
+
+.exTableBody::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, .3);
+	background: var(--header);
+}
+
+
+.exTableHeader {
+	position: relative;
+	width: 95%;
+	margin: auto;
+	margin-bottom: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.colGroup h4,
+.colGroup2 h4,
+.colGroup3 h4 {
+	padding: 1em;
+	font-size: 1.25em;
+}
+
+.depForm {
+	position: fixed;
+	top: 30%;
+	left: 42.5%;
+	border: 1px solid black;
+	z-index: 10;
+	width: 25%;
+	height: 30%;
+	background: white;
+	border-radius: 10px;
+	display: none;
+}
+
+.splash {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .7);
+	z-index: 9;
+	display: none;
+}
+
+#numInput,
+.form-control {
+	border: 1px solid black;
+}
+
+.close {
+	position: absolute;
+	right: 0;
+	margin: 1em;
+	padding: .3em .5em .3em .5em;
+	background: none;
+	border: 1px solid black;
+	border-radius: 25px;
+}
+
+.close:hover {
+	background: rgb(255, 37, 37);
+	cursor: pointer;
+}
+
+.openForm,
+.delBtn,
+.expBtn {
+	background: none;
+	border: 1px solid black;
+	margin: .25em;
+	padding: .1em;
+	width: 50%;
+	border-radius: 5px;
+}
+
+.openForm:hover,
+.delBtn:hover,
+.expBtn:hover {
+	cursor: pointer;
+	background: var(--header);
+}
+
+.bankName {
+	padding: .25em;
+	font-size: .85em;
+}

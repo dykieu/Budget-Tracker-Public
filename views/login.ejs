@@ -1,0 +1,22 @@
+<div class="container">
+	<div class="card" id="login">
+		<h1> Login </h1>
+		<form action="/login" method="POST">
+			<input type="hidden" name="csrf" value="<%= csrf %>">
+			<div class="input-group">
+				<span class="input-text">
+					<i class="fas fa-user"></i>
+				</span>
+				<input type="text" name="username" class="form-control" placeholder="username" required=''>
+			</div>
+			<div class="input-group">
+				<span class="input-text">
+					<i class="fas fa-key"></i>
+				</span>
+				<input type="password" name="password" class="form-control" placeholder="password" required=''>
+			</div>
+			<button id='loginBtn' type="submit"> log in </button>
+		</form>
+		<a id='signupLink' href="su"> sign up </a>
+	</div>
+</div>

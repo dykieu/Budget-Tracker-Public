@@ -1,2 +1,2 @@
-# Budget-Tracker-Public
+# Budget-Tracker
  Budget Tracking website to help track spending and income

@@ -1,0 +1,334 @@
+<div class="header">
+	<%= title %> 
+</div>
+<div class="expenditureMain">
+	<div class="expenditureCol" id="exLeft">
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<div class="colGroup">
+			<h4> All Logs </h4>
+			<% if ((deposits != '' && deposits != null) || (expenditure != '' && expenditure != null)) { %> 
+				<div class="exTableHeader">
+					<table>
+						<thead>
+							<tr>
+								<th>Type</th>
+								<th>Amount</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="exTableBody">
+					<table id="allLog">
+						<tbody>
+							<% for (let i = 0; i < deposits.length; i++) { %>
+								<tr>
+									<td> Deposit </td>
+									<td> $<%= deposits[i].amount %></td>
+									<td> <%= deposits[i].date %> </td>
+								</tr>
+							<% } %> 
+							<% for (let i = 0; i < expenditure.length; i++) { %>
+								<tr id="<%= expenditure[i].id %>" >
+									<td> Expenditure </td>
+									<td> $<%= expenditure[i].amount %></td>
+									<td> <%= expenditure[i].date %> </td>
+								</tr>
+							<% } %> 
+						</tbody>
+					</table>
+				</div>
+			<% } else {%>
+				<h4 class="noneError"> No logs for current month </h4>
+				<h4 class="noneError"> Visit the <a href="/add">add</a> tab to add entries</h4>
+			<% } %>  
+		</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<div class="colGroup">
+			<h4> Deposits </h4>
+			<h6><%= dateRange.start %> to <%= dateRange.end %></h6>
+			<% if ((deposits != '' && deposits != null) && (banks != '' && banks != null)) { %> 
+				<div class="exTableHeader">
+					<table>
+						<thead>
+							<tr>
+								<th>Bank</th>
+								<th>Type</th>
+								<th>Amount</th>
+								<th>Date</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="exTableBody">
+					<table>
+						<tbody>
+							<% for (let i = 0; i < deposits.length; i++) { %>
+								<tr>
+									<% for (let j = 0; j < banks.length; j++) { %>
+										<% if (banks[j].id == deposits[i].bankId) { %>
+											<td> <%= banks[j].bankName %> </td>
+										<% } %>  
+									<% } %> 
+									<td> Deposit </td>
+									<td> $<%= deposits[i].amount %></td>
+									<td> <%= deposits[i].date %> </td>
+									<td>
+										<button class="openForm" id='open<%= deposits[i].id %>'> EDIT </button>
+									</td>
+									<td>
+										<form action="/logistics/delete" method="POST">
+											<input type="hidden" name="csrf" value="<%= csrf %>">
+											<input type="hidden" name="dep2Del" value="<%= deposits[i].id %>">
+											<button type="submit" class="delBtn"> DELETE </button>
+										</form>
+									</td>
+								</tr>
+								<div class="depForm" id="depForm<%= deposits[i].id %>">
+									<button class="close" id="close<%= deposits[i].id %> "> X </button>
+									<form action="/logistics/edit" method="POST">
+										<input type="hidden" name="csrf" value="<%= csrf %>">
+										<input type="hidden" name="dep2Edit" value="<%= deposits[i].id %>">
+										<h4> Edit Deposit</h4>
+										<div class="input-group">
+											<span class="input-text">
+												<i class="far fas fa-money-check"></i>
+											</span>
+											<input type="number" step=".01" name="depositAmt" id="numInput" class="form-control" placeholder="Deposit Amount" value="<%= deposits[i].amount %>" required=''>
+										</div>
+										<div class="input-group">
+											<label for="depositType"> Type: </label>
+											<select name="depositType" id="depositType">
+												<option value="0"> Select an Option</option>
+												<% if (deposits[i].type == 'paycheck') { %>
+													<option value="paycheck" selected> Paycheck </option>
+													<option value="other"> Other </option>
+												<% } else { %>
+													<option value="paycheck"> Paycheck </option>
+													<option value="other" selected> Other </option>
+												<% } %>   
+											</select>
+										</div>
+										<div class="input-group">
+											<textarea name="depositDesc" id="depositDesc" cols="60" rows="10"  value="" placeholder="Notes/Description if applicable"><%= deposits[i].description %> </textarea>
+										</div>
+										<button type="submit" class="addBtn">Submit</button>
+									</form>
+								</div>
+							<% } %> 
+						</tbody>
+					</table>
+				</div>
+			<% } else {%>
+				<h4 class="noneError"> No logs for current month </h4>
+				<h4 class="noneError"> Visit the <a href="/add">add</a> tab to add entries</h4>
+			<% } %>  
+		</div>
+	</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+	<div class="expenditureCol" id="exRight">
+		<div class="colGroup">
+			<h4> Expenditures </h4>
+			<h6><%= dateRange.start %> to <%= dateRange.end %></h6>
+			<% if ((expenditure != '' && expenditure != null) && (banks != '' && banks != null)) { %> 
+				<div class="exTableHeader">
+					<table>
+						<thead>
+							<tr>
+								<th>Bank</th>
+								<th>Type</th>
+								<th>Amount</th>
+								<th>Date</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="exTableBody">
+					<table>
+						<tbody>
+							<% for (let i = 0; i < expenditure.length; i++) { %>
+								<tr>
+									<% for (let j = 0; j < banks.length; j++) { %>
+										<% if (banks[j].id == expenditure[i].bankId) { %>
+											<td> <%= banks[j].bankName %> </td>
+										<% } %>  
+									<% } %> 
+									<td> Expenditure </td>
+									<td> $<%= expenditure[i].amount %></td>
+									<td> <%= expenditure[i].date %> </td>
+									<td>
+										<button class="openForm" id='open<%= expenditure[i].id %>'> EDIT </button>
+									</td>
+									<td>
+										<form action="/logistics/delete" method="POST">
+											<input type="hidden" name="csrf" value="<%= csrf %>">
+											<input type="hidden" name="exp2Del" value="<%= expenditure[i].id %>">
+											<button type="submit" class="expBtn"> DELETE </button>
+										</form>
+									</td>
+								</tr>
+								<div class="depForm" id="depForm<%= expenditure[i].id %>">
+									<button class="close" id="close<%= expenditure[i].id %> "> X </button>
+									<form action="/logistics/edit" method="POST">
+										<input type="hidden" name="csrf" value="<%= csrf %>">
+										<input type="hidden" name="exp2Edit" value="<%= expenditure[i].id %>">
+										<h4> Adding a Expenditure</h4>
+										<div class="input-group">
+											<span class="input-text">
+												<i class="far fas fa-money-check"></i>
+											</span>
+											<input type="number" step=".01" name="spendAmt" class="form-control" placeholder="Expenditure Amount" value="<%= expenditure[i].amount %>" required=''>
+										</div>
+										<div class="input-group">
+											<label for="spendType"> Type: </label>
+											<input type="text" name="spendType" placeholder="Catagory of spending" class="form-control" value="<%= expenditure[i].catagory%>" required=''>
+										</div>
+										<div class="input-group">
+											<textarea name="spendDesc" id="spendDesc" cols="60" rows="10" placeholder="Notes/Description if applicable"><%= expenditure[i].description %></textarea>
+										</div>
+										<button type="submit" class="addBtn">Submit</button>
+									</form>
+								</div>
+							<% } %> 
+						</tbody>
+					</table>
+				</div>
+			<% } else {%>
+				<h4 class="noneError"> No logs for current month </h4>
+				<h4 class="noneError"> Visit the <a href="/add">add</a> tab to add entries</h4>
+			<% } %> 
+		</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<div class="expenditureMain2">
+			<div class="expenditureCol2">
+				<div class="colGroup2">
+					<h4> Banks </h4>
+					<% if (banks != '' && banks != null) { %> 
+						<div class="exTableHeader"></div>
+							<table>
+								<thead>
+									<tr>
+										<th> Bank </th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div class="exTableBody">
+							<table>
+								<tbody>
+									<% for (let i = 0; i < banks.length; i++) { %>
+										<tr>
+											<td class="bankName"><%= banks[i].bankName %></td>
+											<td>
+												<button class="openForm" id='open<%= banks[i].id %>'> EDIT </button>
+											</td>
+											<td>
+												<form action="/logistics/delete" method="POST">
+													<input type="hidden" name="csrf" value="<%= csrf %>">
+													<input type="hidden" name="bank2Del" value="<%= banks[i].id %>">
+													<button type="submit" class="delBtn"> DELETE </button>
+												</form>
+											</td>
+										</tr>
+										<div class="depForm" id="depForm<%= banks[i].id %>">
+											<button class="close" id="close<%= banks[i].id %> "> X </button>
+											<form action="/logistics/edit" method="POST">
+												<input type="hidden" name="csrf" value="<%= csrf %>">
+												<input type="hidden" name="bank2Edit" value="<%= banks[i].id %>">
+												<h4> Edit Bank Account</h4>
+												<div class="input-group">
+													<span class="input-text">
+														<i class="fas fa-university"></i>
+													</span>
+													<input type="text" name="bankName" class="form-control" placeholder="Bank Name" value="<%= banks[i].bankName %>" required=''>
+												</div>
+												<div class="input-group">
+													<span class="input-text">
+														<i class="fas fa-money-check-alt"></i>
+													</span>
+													<input type="number" step=".01" name="bankBalance" class="form-control" placeholder="Bank Balance" value="<%= banks[i].balance %>" required=''>
+												</div>
+												<button type="submit" class="addBtn">Submit</button>
+											</form>
+										</div>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
+					<% } else { %>
+						<h4 class="noneError"> No logs for bank accounts </h4>
+						<h4 class="noneError"> Visit the <a href="/add">add</a> tab to add entries</h4>
+					<% } %>  
+				</div>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<div class="colGroup3">
+					<h4>Budgets</h4>
+					<% if (budget != '' && budget != null) { %>
+						<div class="exTableHeader">
+							<table>
+								<thead>
+									<tr>
+										<th> Budget </th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div class="exTableBody">
+							<table>
+								<tbody>
+									<% for (let i = 0; i < budget.length; i++) { %>
+										<tr>
+											<td class="bankName"><%= budget[i].catagory %></td>
+											<td>
+												<button class="openForm" id='open<%= budget[i].id %>'> EDIT </button>
+											</td>
+											<td>
+												<form action="/logistics/delete" method="POST">
+													<input type="hidden" name="csrf" value="<%= csrf %>">
+													<input type="hidden" name="budget2Del" value="<%= budget[i].id %>">
+													<button type="submit" class="delBtn"> DELETE </button>
+												</form>
+											</td>
+										</tr>
+										<div class="depForm" id="depForm<%= budget[i].id %>">
+											<button class="close" id="close<%= budget[i].id %> "> X </button>
+											<form action="/logistics/edit" method="POST">
+												<input type="hidden" name="csrf" value="<%= csrf %>">
+												<input type="hidden" name="budget2Edit" value="<%= budget[i].id %>">
+												<h4> Edit Budgets</h4>
+												<div class="input-group">
+													<span class="input-text">
+														<i class="fas fa-wallet"></i>
+													</span>
+													<input type="text" name="budgetName" class="form-control" placeholder="Budget Catagory" value="<%= budget[i].catagory %>" required=''>
+												</div>
+												<div class="input-group">
+													<span class="input-text">
+														<i class="far fa-money-bill-alt"></i>
+													</span>
+													<input type="number" step=".01" name="budgetBalance" class="form-control" placeholder="Budget Amount" value="<%= budget[i].budget%>" required=''>
+												</div>
+												<button type="submit" class="addBtn">Submit</button>
+											</form>
+										</div>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
+					<% } else { %>
+						<h4 class="noneError"> No logs for budgets </h4>
+						<h4 class="noneError"> Visit the <a href="/add">add</a> tab to add entries</h4>
+					<% } %>   
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
