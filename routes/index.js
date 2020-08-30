@@ -637,7 +637,8 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 			dateRange: {
 				start: start.toISOString().substr(0, 10),
 				end: end.toISOString().substr(0, 10)
-			}
+			},
+			csrf: cToken
 		});
 	} else {
 		console.error('Error - Can not find user session');
