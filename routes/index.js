@@ -30,7 +30,7 @@ const csurfProtection = csrf({cookie: false});
  * and graphs for the page
  * 
 *******************************************************************/
-router.get('/',csurfProtection , async (req, res, next) => {
+router.get('/', csurfProtection , async (req, res, next) => {
 	// Checks that User is logged in
 	if (req.session.userId) {
 		// Variables
@@ -39,7 +39,7 @@ router.get('/',csurfProtection , async (req, res, next) => {
 		let allDeposits = [];
 		let today = new Date();
 		let start = new Date(today.getFullYear(), today.getMonth(), 01);
-		let end = new Date(today.getFullYear(), today.getMonth(), daysInMonth(today.getMonth() + 1, today.getFullYear()));
+		let end = new Date(today.getFullYear(), today.getMonth(), daysInMonth(today.getMonth() + 1, today.getFullYear()) + 1);
 
 		try {
 			// Finds the account
@@ -53,6 +53,8 @@ router.get('/',csurfProtection , async (req, res, next) => {
 				budget = await Budget.find({monthId: findMonth.id}).orFail();
 			}
 
+			console.log(start);
+			console.log(end);
 			// Grab monthly deposits
 			if (accounts != '' && accounts != null) {
 				for (let i = 0; i < accounts.length; i++) {
@@ -65,14 +67,13 @@ router.get('/',csurfProtection , async (req, res, next) => {
 					});
 					allDeposits.push(findDeposits.reverse());
 				}
-				console.log(allDeposits);
 			}
 		} catch (err) {
 			console.error(err);
 			return next(err);
 		}
-		console.log(budget);
 		
+		console.log(allDeposits);
 		return res.render('index', {title: 'Home', name: req.session.name,
 		 bankAcc: accounts,
 		  budget: budget,
@@ -531,8 +532,16 @@ router.post('/add/spending', async (req, res, next) => {
 	
 				if (findMonth != '') {
 					// Attempts to find applicable budget type
-					budget = await Budget.findOne({monthId: findMonth.id, catagory: req.body.spendType.toLowerCase()})
-					.orFail(new Error('Error - Unable to find budget catagory specified, Bank and expenditure is updated but budget will not be'));
+					budget = await Budget.findOne({monthId: findMonth.id, catagory: req.body.spendType.toLowerCase()});
+
+					console.log(budget);
+					// If cannot find budget type and the specified budget type is etc or other, redirect
+					if (budget == null && req.body.spendType.toLowerCase() == 'etc' || req.body.spendType.toLowerCase() == 'other') {
+						return res.redirect('/');
+					} else if (budget == null) {
+						let err = new Error('Error - Unable to find budget catagory specified, Bank and expenditure is updated but budget will not be');
+						return next(err);
+					}
 	
 					// If budget exists, add the spending to it
 					if (budget != '') {
@@ -579,14 +588,14 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 		let allExpenditures = [];
 		let today = new Date();
 		let start = new Date(today.getFullYear(), today.getMonth(), 01);
-		let end = new Date(today.getFullYear(), today.getMonth(), daysInMonth(today.getMonth() + 1, today.getFullYear()));
+		let end = new Date(today.getFullYear(), today.getMonth(), daysInMonth(today.getMonth() + 1, today.getFullYear()) + 1);
 
 		// Grab Month and budget for it
 		try {
 			
 			findMonth = await Month.findOne({month: curMo[0], year: curMo[1], userId: req.session.userId});
 			
-			// If current month exists, grab budget && expenditure
+			// If current month exists, grab all budget
 			if (findMonth != '' && findMonth != undefined) {
 				budget = await (await Budget.find({monthId: findMonth.id}));
 				if (budget != '' && budget != undefined) {
@@ -628,10 +637,11 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 		const cToken = req.csrfToken();
 		req.session.cToken = cToken;
 
+		console.log(allExpenditures)
 		return res.render('logistics', {
 			title: 'Logs',
-			deposits: findDeposits,
-			expenditure: expenditure,
+			deposits: allDeposits,
+			expenditure: allExpenditures,
 			budget: budget,
 			banks: findBank,
 			dateRange: {
@@ -672,20 +682,63 @@ router.post('/logistics/edit', async (req, res, next) => {
 			}
 			return res.redirect('/logistics');
 		} else if (req.body.exp2Edit) {
-			let findExpenditure, findBank;
+			let findExpenditure, findBank, findBudget, findMonth;
 			try {
 				findExpenditure = await Expenditure.findById(req.body.exp2Edit);
 				findBank = await Account.findById(findExpenditure.bankId);
+
 				let newBal = (parseFloat(findBank.balance) + parseFloat(findExpenditure.amount) - parseFloat(req.body.spendAmt)).toFixed(2);
 				findBank = await Account.findByIdAndUpdate(findExpenditure.bankId, {
 					balance: newBal
 				});
+
 				findDeposit = await Expenditure.findByIdAndUpdate(req.body.exp2Edit, {
-					type: req.body.spendType,
+					catagory: req.body.spendType,
 					description: req.body.spendDesc,
 					amount: req.body.spendAmt
 				});
-				console.log('Console - Successfully updated expenditure and balance');
+
+				// Update the budget if applicable
+				let curMo = getDate();
+				findMonth = await Month.findOne({month: curMo[0], year: curMo[1], userId: req.session.userId});
+				console.log(findMonth);
+				if (findMonth != '' && findMonth != undefined) {
+					findBudget = await Budget.findOne({monthId: findMonth.id, catagory: req.body.spendType});
+					console.log(findBudget);
+					if (findBudget != '' && findBudget != undefined) {
+						let editBudget = (parseFloat(findBudget.spent) - parseFloat(findExpenditure.amount) + parseFloat(req.body.spendAmt)).toFixed(2);
+						console.log(editBudget);
+						budget = await Budget.findOneAndUpdate({monthId: findMonth.id, catagory: req.body.spendType}, {
+							spent: editBudget
+						});
+					}
+				}
+				console.log('Console - Successfully updated expenditure, budget and balance');
+			} catch (err) {
+				console.error(err);
+				return next(err);
+			}
+			return res.redirect('/logistics');
+		} else if (req.body.bank2Edit) {
+			let findBank;
+			try {
+				findBank = await Account.findByIdAndUpdate(req.body.bank2Edit, {
+					bankName: (req.body.bankName).toLowerCase(),
+					balance: (parseFloat(req.body.bankBalance)).toFixed(2)
+				});
+				console.log('Console - Successfully updated bank account');
+			} catch (err) {
+				console.error(err);
+				return next(err);
+			}
+			return res.redirect('/logistics');
+		} else if (req.body.budget2Edit) {
+			let findBudget;
+			try {
+				findBudget = await Budget.findByIdAndUpdate(req.body.budget2Edit, {
+					catagory: (req.body.budgetName).toLowerCase(),
+					budget:	(parseFloat(req.body.budgetBalance)).toFixed(2)
+				});
 			} catch (err) {
 				console.error(err);
 				return next(err);
@@ -752,7 +805,17 @@ router.post('/logistics/delete', async (req, res, next) => {
 					bankId: req.body.bank2Del
 				});
 				findBank = await Account.findByIdAndDelete(req.body.bank2Del);
-				console.log('Console - Successfully delete bank account (Including expenditures and deposits)');
+				console.log('Console - Successfully deleted bank account (Including expenditures and deposits)');
+			} catch (err) {
+				console.error(err);
+				return next(err);
+			}
+			return res.redirect('/logistics');
+		} else if (req.body.budget2Del) {
+			let findBudget;
+			try {
+				findBudget = await Budget.findByIdAndDelete(req.body.budget2Del);
+				console.log('Console - Successfully deleted budget catagory');
 			} catch (err) {
 				console.error(err);
 				return next(err);

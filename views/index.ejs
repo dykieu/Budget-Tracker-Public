@@ -103,12 +103,14 @@
                 <table>
                   <tbody>
                     <% for (let i = 0; i < deposits.length; i++) { %>
-                      <tr>
-                        <td> <%= i + 1  %> </td>
-                        <td> <%= deposits[i].type %></td>
-                        <td> $<%= deposits[i].amount %></td>
-                        <td> <%= deposits[i].date %> </td>
-                      </tr>
+                        <% for (let j = 0; j < deposits[i].length; j++) { %>
+                          <tr>
+                            <td> <%= i + 1  %> </td>
+                            <td> <%= deposits[i][j].type %></td>
+                            <td> $<%= deposits[i][j].amount %></td>
+                            <td> <%= deposits[i][j].date %> </td>
+                          </tr>
+                        <% } %>
                     <% } %>  
                   </tbody>
                 </table>

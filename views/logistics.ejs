@@ -22,18 +22,22 @@
 					<table id="allLog">
 						<tbody>
 							<% for (let i = 0; i < deposits.length; i++) { %>
-								<tr>
-									<td> Deposit </td>
-									<td> $<%= deposits[i].amount %></td>
-									<td> <%= deposits[i].date %> </td>
-								</tr>
+								<% for (let j = 0; j < deposits[i].length; j++) { %>
+									<tr>
+										<td> Deposit </td>
+										<td> $<%= deposits[i][j].amount %></td>
+										<td> <%= deposits[i][j].date %> </td>
+									</tr>
+								<% } %>
 							<% } %> 
 							<% for (let i = 0; i < expenditure.length; i++) { %>
-								<tr id="<%= expenditure[i].id %>" >
-									<td> Expenditure </td>
-									<td> $<%= expenditure[i].amount %></td>
-									<td> <%= expenditure[i].date %> </td>
-								</tr>
+								  <% for (let j = 0; j < expenditure[i].length; j++) { %>
+									<tr>
+									  <td> Expenditure </td>
+									  <td> $<%= expenditure[i][j].amount %></td>
+									  <td> <%= expenditure[i][j].date %> </td>
+									</tr>
+								  <% } %>
 							<% } %> 
 						</tbody>
 					</table>
@@ -66,57 +70,59 @@
 					<table>
 						<tbody>
 							<% for (let i = 0; i < deposits.length; i++) { %>
-								<tr>
-									<% for (let j = 0; j < banks.length; j++) { %>
-										<% if (banks[j].id == deposits[i].bankId) { %>
-											<td> <%= banks[j].bankName %> </td>
-										<% } %>  
-									<% } %> 
-									<td> Deposit </td>
-									<td> $<%= deposits[i].amount %></td>
-									<td> <%= deposits[i].date %> </td>
-									<td>
-										<button class="openForm" id='open<%= deposits[i].id %>'> EDIT </button>
-									</td>
-									<td>
-										<form action="/logistics/delete" method="POST">
+								<% for (let k = 0; k < deposits[i].length; k++) { %>
+									<tr>
+										<% for (let j = 0; j < banks.length; j++) { %>
+											<% if (banks[j].id == deposits[i][k].bankId) { %>
+												<td> <%= banks[j].bankName %> </td>
+											<% } %>  
+										<% } %> 
+										<td> Deposit </td>
+										<td> $<%= deposits[i][k].amount %></td>
+										<td> <%= deposits[i][k].date %> </td>
+										<td>
+											<button class="openForm" id='open<%= deposits[i][k].id %>'> EDIT </button>
+										</td>
+										<td>
+											<form action="/logistics/delete" method="POST">
+												<input type="hidden" name="csrf" value="<%= csrf %>">
+												<input type="hidden" name="dep2Del" value="<%= deposits[i][k].id %>">
+												<button type="submit" class="delBtn"> DEL </button>
+											</form>
+										</td>
+									</tr>
+									<div class="depForm" id="depForm<%= deposits[i][k].id %>">
+										<button class="close" id="close<%= deposits[i][k].id %> "> X </button>
+										<form action="/logistics/edit" method="POST">
 											<input type="hidden" name="csrf" value="<%= csrf %>">
-											<input type="hidden" name="dep2Del" value="<%= deposits[i].id %>">
-											<button type="submit" class="delBtn"> DELETE </button>
+											<input type="hidden" name="dep2Edit" value="<%= deposits[i][k].id %>">
+											<h4> Edit Deposit</h4>
+											<div class="input-group">
+												<span class="input-text">
+													<i class="far fas fa-money-check"></i>
+												</span>
+												<input type="number" step=".01" name="depositAmt" id="numInput" class="form-control" placeholder="Deposit Amount" value="<%= deposits[i][k].amount %>" required=''>
+											</div>
+											<div class="input-group">
+												<label for="depositType"> Type: </label>
+												<select name="depositType" id="depositType">
+													<option value="0"> Select an Option</option>
+													<% if (deposits[i][k].type == 'paycheck') { %>
+														<option value="paycheck" selected> Paycheck </option>
+														<option value="other"> Other </option>
+													<% } else { %>
+														<option value="paycheck"> Paycheck </option>
+														<option value="other" selected> Other </option>
+													<% } %>   
+												</select>
+											</div>
+											<div class="input-group">
+												<textarea name="depositDesc" id="depositDesc" cols="60" rows="10"  value="" placeholder="Notes/Description if applicable"><%= deposits[i].description %> </textarea>
+											</div>
+											<button type="submit" class="addBtn">Submit</button>
 										</form>
-									</td>
-								</tr>
-								<div class="depForm" id="depForm<%= deposits[i].id %>">
-									<button class="close" id="close<%= deposits[i].id %> "> X </button>
-									<form action="/logistics/edit" method="POST">
-										<input type="hidden" name="csrf" value="<%= csrf %>">
-										<input type="hidden" name="dep2Edit" value="<%= deposits[i].id %>">
-										<h4> Edit Deposit</h4>
-										<div class="input-group">
-											<span class="input-text">
-												<i class="far fas fa-money-check"></i>
-											</span>
-											<input type="number" step=".01" name="depositAmt" id="numInput" class="form-control" placeholder="Deposit Amount" value="<%= deposits[i].amount %>" required=''>
-										</div>
-										<div class="input-group">
-											<label for="depositType"> Type: </label>
-											<select name="depositType" id="depositType">
-												<option value="0"> Select an Option</option>
-												<% if (deposits[i].type == 'paycheck') { %>
-													<option value="paycheck" selected> Paycheck </option>
-													<option value="other"> Other </option>
-												<% } else { %>
-													<option value="paycheck"> Paycheck </option>
-													<option value="other" selected> Other </option>
-												<% } %>   
-											</select>
-										</div>
-										<div class="input-group">
-											<textarea name="depositDesc" id="depositDesc" cols="60" rows="10"  value="" placeholder="Notes/Description if applicable"><%= deposits[i].description %> </textarea>
-										</div>
-										<button type="submit" class="addBtn">Submit</button>
-									</form>
-								</div>
+									</div>
+								<% } %>  
 							<% } %> 
 						</tbody>
 					</table>
@@ -151,48 +157,50 @@
 					<table>
 						<tbody>
 							<% for (let i = 0; i < expenditure.length; i++) { %>
-								<tr>
-									<% for (let j = 0; j < banks.length; j++) { %>
-										<% if (banks[j].id == expenditure[i].bankId) { %>
-											<td> <%= banks[j].bankName %> </td>
-										<% } %>  
-									<% } %> 
-									<td> Expenditure </td>
-									<td> $<%= expenditure[i].amount %></td>
-									<td> <%= expenditure[i].date %> </td>
-									<td>
-										<button class="openForm" id='open<%= expenditure[i].id %>'> EDIT </button>
-									</td>
-									<td>
-										<form action="/logistics/delete" method="POST">
+								<% for (let k = 0; k < expenditure[i].length; k++) { %>
+									<tr>
+										<% for (let j = 0; j < banks.length; j++) { %>
+											<% if (banks[j].id == expenditure[i][k].bankId) { %>
+												<td> <%= banks[j].bankName %> </td>
+											<% } %>  
+										<% } %> 
+										<td> Expenditure </td>
+										<td> $<%= expenditure[i][k].amount %></td>
+										<td> <%= expenditure[i][k].date %> </td>
+										<td>
+											<button class="openForm" id='open<%= expenditure[i][k].id %>'> EDIT </button>
+										</td>
+										<td>
+											<form action="/logistics/delete" method="POST">
+												<input type="hidden" name="csrf" value="<%= csrf %>">
+												<input type="hidden" name="exp2Del" value="<%= expenditure[i][k].id %>">
+												<button type="submit" class="expBtn"> DEL </button>
+											</form>
+										</td>
+									</tr>
+									<div class="depForm" id="depForm<%= expenditure[i][k].id %>">
+										<button class="close" id="close<%= expenditure[i][k].id %> "> X </button>
+										<form action="/logistics/edit" method="POST">
 											<input type="hidden" name="csrf" value="<%= csrf %>">
-											<input type="hidden" name="exp2Del" value="<%= expenditure[i].id %>">
-											<button type="submit" class="expBtn"> DELETE </button>
+											<input type="hidden" name="exp2Edit" value="<%= expenditure[i][k].id %>">
+											<h4> Adding a Expenditure</h4>
+											<div class="input-group">
+												<span class="input-text">
+													<i class="far fas fa-money-check"></i>
+												</span>
+												<input type="number" step=".01" name="spendAmt" class="form-control" placeholder="Expenditure Amount" value="<%= expenditure[i][k].amount %>" required=''>
+											</div>
+											<div class="input-group">
+												<label for="spendType"> Type: </label>
+												<input type="text" name="spendType" placeholder="Catagory of spending" class="form-control" value="<%= expenditure[i][k].catagory%>" required=''>
+											</div>
+											<div class="input-group">
+												<textarea name="spendDesc" id="spendDesc" cols="60" rows="10" placeholder="Notes/Description if applicable"><%= expenditure[i][k].description %></textarea>
+											</div>
+											<button type="submit" class="addBtn">Submit</button>
 										</form>
-									</td>
-								</tr>
-								<div class="depForm" id="depForm<%= expenditure[i].id %>">
-									<button class="close" id="close<%= expenditure[i].id %> "> X </button>
-									<form action="/logistics/edit" method="POST">
-										<input type="hidden" name="csrf" value="<%= csrf %>">
-										<input type="hidden" name="exp2Edit" value="<%= expenditure[i].id %>">
-										<h4> Adding a Expenditure</h4>
-										<div class="input-group">
-											<span class="input-text">
-												<i class="far fas fa-money-check"></i>
-											</span>
-											<input type="number" step=".01" name="spendAmt" class="form-control" placeholder="Expenditure Amount" value="<%= expenditure[i].amount %>" required=''>
-										</div>
-										<div class="input-group">
-											<label for="spendType"> Type: </label>
-											<input type="text" name="spendType" placeholder="Catagory of spending" class="form-control" value="<%= expenditure[i].catagory%>" required=''>
-										</div>
-										<div class="input-group">
-											<textarea name="spendDesc" id="spendDesc" cols="60" rows="10" placeholder="Notes/Description if applicable"><%= expenditure[i].description %></textarea>
-										</div>
-										<button type="submit" class="addBtn">Submit</button>
-									</form>
-								</div>
+									</div>
+								<% } %>  
 							<% } %> 
 						</tbody>
 					</table>
@@ -232,7 +240,7 @@
 												<form action="/logistics/delete" method="POST">
 													<input type="hidden" name="csrf" value="<%= csrf %>">
 													<input type="hidden" name="bank2Del" value="<%= banks[i].id %>">
-													<button type="submit" class="delBtn"> DELETE </button>
+													<button type="submit" class="delBtn"> DEL </button>
 												</form>
 											</td>
 										</tr>
@@ -294,7 +302,7 @@
 												<form action="/logistics/delete" method="POST">
 													<input type="hidden" name="csrf" value="<%= csrf %>">
 													<input type="hidden" name="budget2Del" value="<%= budget[i].id %>">
-													<button type="submit" class="delBtn"> DELETE </button>
+													<button type="submit" class="delBtn"> DEL </button>
 												</form>
 											</td>
 										</tr>
