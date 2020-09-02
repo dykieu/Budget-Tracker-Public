@@ -65,7 +65,9 @@ router.get('/', csurfProtection , async (req, res, next) => {
 						},
 						bankId: accounts[i].id
 					});
-					allDeposits.push(findDeposits.reverse());
+					if (findDeposits != '' && findDeposits != null && findDeposits != undefined) {
+						allDeposits.push(findDeposits.reverse());
+					}
 				}
 			}
 		} catch (err) {
@@ -73,7 +75,6 @@ router.get('/', csurfProtection , async (req, res, next) => {
 			return next(err);
 		}
 		
-		console.log(allDeposits);
 		return res.render('index', {title: 'Home', name: req.session.name,
 		 bankAcc: accounts,
 		  budget: budget,
@@ -616,7 +617,10 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 						},
 						bankId: findBank[i].id
 					});
-					allDeposits.push(findDeposits.reverse());
+
+					if (findDeposits != '' && findDeposits != null && findDeposits != undefined) {
+						allDeposits.push(findDeposits.reverse());
+					}
 
 					//Grab expenditures within month
 					expenditure = await Expenditure.find({
@@ -626,7 +630,10 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 						},
 						bankId: findBank[i].id
 					});
-					allExpenditures.push(expenditure.reverse());
+
+					if (expenditure != '' && expenditure != null && expenditure != undefined) {
+						allExpenditures.push(expenditure.reverse());
+					}
 				}
 			}
 		} catch (err) {
@@ -637,7 +644,6 @@ router.get('/logistics', csurfProtection, async (req, res, next) => {
 		const cToken = req.csrfToken();
 		req.session.cToken = cToken;
 
-		console.log(allExpenditures)
 		return res.render('logistics', {
 			title: 'Logs',
 			deposits: allDeposits,
